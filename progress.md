@@ -277,6 +277,10 @@ Verified 2026-08-08, because it matters and guessing is expensive:
   nothing on the live site** — it only creates a remote branch.
 - Only `git merge` into `main` followed by `git push origin main` publishes.
   Takes about a minute to go live.
+- **Decision, 2026-08-08:** Shaun chose *not* to publish yet. Step 4 gets
+  finished first so the visual work and the SEO head additions ship together.
+  Accepted cost: the dark-mode invisible text and the white-on-gold mobile menu
+  stay live in the meantime.
 - `CNAME` is at the repo root and must stay there or the custom domain breaks.
 - `gh` CLI is **not installed** on this machine, so the Pages settings cannot
   be read via the API. The above was established from the repo and the live
