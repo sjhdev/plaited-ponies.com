@@ -285,7 +285,7 @@ nav .fa{
     color: var(--gold-ink);
 }
 
-h1{
+h1, h2{
     font-size: var(--fs-h1);
     font-weight: 600;
     line-height: 1.2;
@@ -295,7 +295,7 @@ h1, h2, h3{
     text-wrap: balance;
 }
 
-.services h1{
+.services h2{
     color: var(--gold-bright);
 }
 
@@ -357,7 +357,7 @@ h3{
     border-radius: var(--radius-md);
 }
 
-.team-values h1{
+.team-values h2{
     color: var(--gold-bright);
 }
 
@@ -402,7 +402,7 @@ h3{
     border-radius: var(--radius-md);
 }
 
-.locations h1{
+.locations h2{
     color: var(--gold-bright);
 }
 
@@ -453,7 +453,7 @@ h3{
     color: #fff;
 }
 
-.reviews h1{
+.reviews h2{
     color: var(--gold-ink);
 }
 
@@ -502,7 +502,7 @@ h3{
     padding: var(--section-y) var(--space-5);
 }
 
-.contact h1{
+.contact h2{
     color: var(--gold-bright);
     margin-bottom: var(--space-6);
 }
@@ -605,7 +605,7 @@ h3{
     border-radius: var(--radius-md);
 }
 
-.about-col h1{
+.about-col h2{
     color: var(--gold-ink);
 }
 
@@ -815,7 +815,7 @@ h3{
     border-radius: var(--radius-md);
 }
 
-.family-col h1{
+.family-col h2{
     color: var(--gold-bright);
     margin-bottom: var(--space-2);
 }
