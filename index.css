@@ -173,6 +173,19 @@ nav img{
     line-height: 1.15;
 }
 
+/* Gold rule between the hero title and its subtitle, echoing the
+   underline motif on the nav links. Applies to all five heroes, which
+   each have a title followed by a one-line subtitle. */
+.text-box h1::after{
+    content: '';
+    display: block;
+    width: 72px;
+    height: 3px;
+    margin: var(--space-5) auto var(--space-2);
+    background: var(--gold);
+    border-radius: 2px;
+}
+
 .text-box p{
     margin: var(--space-4) auto var(--space-6);
     font-size: var(--fs-lg);
