@@ -97,7 +97,9 @@ img{
     margin-bottom: var(--section-y);
 }
 
-nav{
+/* Scoped to the hero, because the footer link row is a <nav> too and
+   must not pick up the header's flex and padding. */
+.header nav{
     display: flex;
     justify-content: space-between;
     padding: var(--space-5) var(--space-6);
@@ -885,7 +887,7 @@ h3{
     .nav-links ul li::after{
         background: var(--gold-deep);
     }
-    nav{
+    .header nav{
         padding: var(--space-4);
     }
     nav .fa{
