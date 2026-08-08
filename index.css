@@ -720,9 +720,13 @@ h3{
     border-radius: var(--radius-md);
 }
 
+/* The "Contact Us" and "Enquire" buttons link to #enquiry, which is this
+   section. The offset stops it landing flush against the top of the
+   viewport when jumped to. */
 .contact-us{
     width: 80%;
     margin: 0 auto var(--section-y);
+    scroll-margin-top: var(--space-7);
 }
 
 .contact-col{
