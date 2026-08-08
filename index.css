@@ -56,7 +56,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arizonia', cursive;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -86,16 +85,6 @@ img{
     outline: 3px solid var(--gold);
     outline-offset: 3px;
     box-shadow: 0 0 0 6px rgba(20,20,20,0.45);
-}
-
-hr{
-    width: 60%;
-    margin: 0 auto;
-    margin-top: 50px;
-}
-
-#hr-review{
-    margin-top: 50px;
 }
 
 .header{
@@ -660,13 +649,6 @@ h3{
 .services-left img{
     width: 100%;
     border-radius: var(--radius-lg);
-}
-
-.services-left h2{
-    color: var(--gold-ink);
-    font-weight: 600;
-    font-size: var(--fs-h2);
-    margin: var(--space-6) 0;
 }
 
 .services-left p{
