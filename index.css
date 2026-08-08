@@ -916,9 +916,13 @@ h3{
     .text-box{
         margin-top: var(--space-6);
     }
+    /* The mark is a crowned roundel, so it is markedly taller than it is
+       wide. At 130px it rendered 130x161 and dominated the phone header.
+       The PNG itself has no croppable padding left - margins are 2px on
+       every side - so size is the only lever. */
     .header img{
         margin-left: 0;
-        width: 130px;
+        width: 80px;
     }
     .services{
         background-image: var(--overlay),url(imgs/try17.jpg);
