@@ -332,6 +332,58 @@ Verified: five unique titles, five unique descriptions, JSON-LD parses, every
 sitemap URL returns 200, all icons serve with correct content types, no console
 errors, no contrast regressions, no broken images.
 
+### `bd13851`, `c409934` — Step 6, dead code
+
+**The agreed six-step plan is now complete.**
+
+Deleted `foot` (duplicate footer snippet, referenced by nothing), `imgs/grass.jpg`
+(only reachable from a commented-out block) and `imgs/try24.jpg` (only reachable
+from `#about-us-header`, a rule no page uses — `values.html` uses
+`#values-header`).
+
+Removed the commented lorem ipsum block in `services.html` **and the stray
+`</div>` it left behind** — that closing tag was unmatched, so the services page
+had broken nesting. All five pages now balance divs exactly. Also removed the
+commented `<script>` blocks in three pages, 11 spacer paragraphs (`<p>*</p>`
+rendered a literal asterisk on the page), and the `X-UA-Compatible` meta.
+
+From `index.css`: the `hr`/`#hr-review` rules (no `<hr>` exists), `.services-left h2`
+(matches nothing — `services.html` uses `h3` there), `#about-us-header`, and the
+`font-family: 'Arizonia', cursive` line that was overridden on the very next row.
+
+**`README.md` was left alone** — progress.md recorded it as 0 bytes but it holds
+the repo title heading, so it is not dead. The footer's asterisk was also left:
+it sits inside a copy block as a separator, not as a spacer.
+
+### `b6f0df1`, `cc080f4`, `1b7305b` — Low-risk modernisation
+
+Recommendations from the 2026-08-08 review, the subset that carries no SEO risk.
+
+**Semantic landmarks.** Every page was a flat run of `<section>` with no
+`<main>`, `<header>` or `<footer>`. Now `body > header, main, footer, script` on
+all five. Footer link row became `<nav aria-label="Footer">`, header nav got
+`aria-label="Main"`. Class names untouched, so no visual change.
+
+> **Gotcha this exposed.** The bare `nav{}` rule (flex, space-between, padding)
+> was written for the header, and the moment the footer link row became a
+> `<nav>` it started matching that too. Both `nav{}` rules are now scoped to
+> `.header nav`. **`nav img` and `nav .fa` were deliberately left unscoped** —
+> the footer nav contains neither, and tightening `nav .fa` to `.header nav .fa`
+> would outrank `.nav-links .fa` and reinstate the white-on-gold mobile close
+> icon fixed in `b8be26b`.
+
+**One `<h1>` per page.** Homepage had six, `team.html` four, `values.html` three.
+Only the tag changed — every heading keeps its exact text and appearance, with
+`h2` grouped into the `h1` sizing rule so section headings still render 44px/600
+in the same golds. Seven CSS selectors remapped to match.
+
+**Core Web Vitals.** All 21 `<img>` tags got true intrinsic `width`/`height`
+(verified against `naturalWidth`/`naturalHeight`, zero mismatches) to stop layout
+shift. Google Fonts trimmed from seven Poppins weights plus Arizonia to
+`400;500;600` — the only three the stylesheet uses. Each page hero is a CSS
+`background-image` the preload scanner cannot find, so each page got a
+`<link rel="preload" as="image" fetchpriority="high">` for its own hero.
+
 ---
 
 ## Verified facts — do not re-litigate
@@ -400,16 +452,28 @@ errors, no contrast regressions, no broken images.
 
 ## Next steps
 
-Agreed plan was six ordered steps. **Steps 1–5 are done.** The branch is pushed
-but not merged, so the live site is still untouched.
+**All six agreed steps are done**, plus the low-risk half of the modernisation
+review. The branch is pushed but not merged, so the live site is still untouched.
 
-**Step 6 — dead code cleanup.** The list above, plus three things step 5
-deliberately left in `index.css` because they belong here: the dead
-`font-family: 'Arizonia', cursive` declaration (immediately overridden by the
-Poppins line on the next row, so Arizonia is loaded from Google Fonts but never
-used); the `hr` and `#hr-review` rules for elements that exist nowhere; and
-`.services-left h2`, which now matches nothing because `services.html` uses an
-`<h3>` there.
+Still outstanding, in rough order of value:
+
+1. **Real pricing on `services.html`.** Every price is a placeholder `£*` on the
+   one page meant to convert. This is worth more than everything below combined —
+   "pony party prices Falkirk" is exactly what people search.
+2. **Claim and populate the Google Business Profile.** For a local business this
+   outranks anything on the site itself.
+3. **Left-align the long prose** in `.about-col p` and `.family-col p`. Capping
+   the measure at 68ch helped; centred running text is still the harder read.
+   Deferred because it exceeds "keep the existing layout".
+4. **A page per service** (`/pony-parties.html`, `/livery.html`). Adding URLs is
+   SEO-safe; changing existing ones is not.
+5. **Replace the Font Awesome kit with inline SVG.** A render-blocking script
+   from two hosts for six icons. Needs care — the icons work via the v4 shim.
+6. **Click-to-load the two Google Maps embeds** on `contact.html`.
+7. **Make the mobile menu toggle a `<button>`.** It is an `<i onclick>` and is
+   not keyboard reachable. The `:focus-visible` rule is already in place and will
+   apply the moment it becomes a real control. Touches nav markup in all 5 files.
+8. **De-duplicate the footer**, currently inline in all five pages.
 
 Heading hierarchy was explicitly deferred: multiple `<h1>` is untidy but Google
 handles it fine in HTML5, so it is the lowest payoff for the most markup churn.
