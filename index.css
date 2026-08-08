@@ -5,6 +5,14 @@
     font-family: 'Poppins', sans-serif;
 }
 
+/* The page sets no background colour, so a browser in dark mode paints its
+   own dark canvas behind the black body text and the text disappears. Pin
+   the page to a light scheme so it renders the same for everyone. */
+html{
+    color-scheme: light;
+    background-color: #fff;
+}
+
 hr{
     width: 60%;
     margin: 0 auto;
@@ -32,8 +40,11 @@ nav{
     align-items: center;
 }
 
+/* logot.png was trimmed of its empty padding, so it is narrower and taller
+   than before. These widths keep the visible logo the same size it always
+   rendered at, minus the dead space around it. */
 nav img{
-    width: 120px;
+    width: 82px;
     margin-top: 0;
 }
 
@@ -451,7 +462,7 @@ h3{
 }
 
 #footer-img{
-    width: 150px;
+    width: 102px;
 }
 
 .icons .fa{
@@ -789,7 +800,7 @@ h3{
     }
     .header img{
         margin-left: -15px;
-        width: 50%;
+        width: 130px;
     }
     .services{
         background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/try17.jpg);
