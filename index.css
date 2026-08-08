@@ -570,10 +570,6 @@ h3{
 
 /* about us page */
 
-#about-us-header{
-    background-image: var(--overlay),url(imgs/try24.jpg);
-}
-
 .about-us{
     width: 90%;
     margin: 0 auto;
