@@ -286,6 +286,52 @@ Verified 2026-08-08, because it matters and guessing is expensive:
   be read via the API. The above was established from the repo and the live
   response.
 
+### `9230b0f`, `1354d57`, `056c7f9` — Step 4, head additions
+
+**Step 4 is done.** Titles were confirmed with Shaun before touching them.
+
+`9230b0f` — icons and social image, all generated from assets already in the
+repo: `favicon.ico` (32px PNG in an ICO container so `/favicon.ico` stops
+404ing), `favicon-32.png`, `apple-touch-icon.png` (180px on a solid `#04091e`
+tile, since iOS handles transparency poorly and the gold needs dark backing),
+and `imgs/og-image.jpg` (1200×630 centre crop of `teddy.jpg`, the correct
+1.91:1 for social cards). The 192/512 PWA icons were dropped — nothing requests
+them without a manifest and the 512 was 235KB.
+
+`1354d57` — the substance:
+
+| Page | Title (all < 60 chars) |
+|---|---|
+| `/` | Pony Parties & Riding Lessons, Falkirk \| Plaited Ponies |
+| `/services.html` | Our Services: Parties, Lessons & Livery \| Plaited Ponies |
+| `/values.html` | Our Story & Values \| Plaited Ponies Equine Services |
+| `/team.html` | Meet the Family \| Plaited Ponies Equine Services |
+| `/contact.html` | Contact & Locations \| Plaited Ponies, Avonbridge |
+
+Plus per-page meta descriptions (142–154 chars), self-referencing canonicals,
+favicon links, `theme-color`, full Open Graph and `twitter:card`. The unicorn
+emoji was dropped from titles — Google strips emoji from results anyway.
+
+`LocalBusiness` JSON-LD on the homepage only, built strictly from details
+already published on the site. **Two deliberate omissions:** no
+`aggregateRating`/`review` (Google disallows self-serving review markup on
+`LocalBusiness` — it cannot produce rich results and risks a manual action),
+and no `priceRange` (services still show placeholder `£*`). **Only one address
+is marked up** — The Crofts at Armadale has no street address published
+anywhere on the site. If Shaun supplies it, add a second entry.
+
+Alt text on the nine content images that had `alt=""`. **Every image was opened
+and described from what is actually in it**, not guessed from the filename.
+`loading="lazy"` added to the same nine, none of which are above the fold. The
+two review avatars keep `alt=""` deliberately — they sit beside the reviewer's
+name, so describing them would make a screen reader say the person twice.
+
+`056c7f9` — `sitemap.xml` (five URLs with `lastmod`) and `robots.txt`.
+
+Verified: five unique titles, five unique descriptions, JSON-LD parses, every
+sitemap URL returns 200, all icons serve with correct content types, no console
+errors, no contrast regressions, no broken images.
+
 ---
 
 ## Verified facts — do not re-litigate
@@ -354,14 +400,8 @@ Verified 2026-08-08, because it matters and guessing is expensive:
 
 ## Next steps
 
-Agreed plan was six ordered steps, each its own commit. Steps 1–3 and 5 are
-done. **Nothing has been pushed.** All four commits are local.
-
-**Step 4 — head additions.** Unique titles, meta descriptions, OG tags, favicon,
-alt text, `LocalBusiness` structured data, sitemap, robots. Purely additive.
-Note the title change is the one item that alters an existing signal — it was
-judged worth it because the current state (five identical titles) is actively
-harmful, but confirm with Shaun before doing it.
+Agreed plan was six ordered steps. **Steps 1–5 are done.** The branch is pushed
+but not merged, so the live site is still untouched.
 
 **Step 6 — dead code cleanup.** The list above, plus three things step 5
 deliberately left in `index.css` because they belong here: the dead
