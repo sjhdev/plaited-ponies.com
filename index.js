@@ -1,12 +1,18 @@
-let navLinks = document.getElementById("navLinks")
+const navLinks = document.getElementById("navLinks")
 
 function showMenu(){
-    navLinks.style.right = "0"
-    navLinks.style.display = "block"
+    navLinks.classList.add("open")
 }
 
 function hideMenu(){
-    navLinks.style.right = "-200px"
-    navLinks.style.display = "block"
+    navLinks.classList.remove("open")
 }
 
+// close the menu on Escape, and on any nav link click
+document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") hideMenu()
+})
+
+navLinks.querySelectorAll("a").forEach(function(link){
+    link.addEventListener("click", hideMenu)
+})
