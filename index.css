@@ -1,6 +1,61 @@
+/* ============================================================
+   Design tokens
+   ============================================================ */
+
+:root{
+    /* The brand gold #d4af37 measures 2.1:1 against white, which fails
+       WCAG AA at every size. It is kept as-is for fills, borders and
+       decoration, and text uses whichever derived token suits the
+       background it sits on. */
+    --gold: #d4af37;         /* fills, borders, decoration            */
+    --gold-ink: #8a6a10;     /* gold text on white          — 5.1:1   */
+    --gold-bright: #e6c76b;  /* gold text over the overlays — 4.7:1   */
+    --gold-deep: #3d2f06;    /* text sitting on a gold fill — 10:1    */
+
+    --ink: #1f2328;          /* body text                             */
+    --paper: #fff;
+    --rule: #8a8a8a;         /* form field borders          — 3.5:1   */
+    --navy: navy;
+
+    /* The photo overlay shared by every hero and banded section. */
+    --overlay: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7));
+
+    /* Type scale */
+    --fs-xs:   0.8125rem;                                    /* 13    */
+    --fs-sm:   0.9375rem;                                    /* 15    */
+    --fs-base: 1.0625rem;                                    /* 17    */
+    --fs-lg:   1.1875rem;                                    /* 19    */
+    --fs-h3:   clamp(1.25rem,  1.10rem + 0.6vw, 1.5rem);     /* 20-24 */
+    --fs-h2:   clamp(1.5rem,   1.20rem + 1.4vw, 2rem);       /* 24-32 */
+    --fs-h1:   clamp(1.875rem, 1.40rem + 2.2vw, 2.75rem);    /* 30-44 */
+    --fs-hero: clamp(2rem,     1.30rem + 3.4vw, 3.25rem);    /* 32-52 */
+
+    /* Spacing scale */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4rem;
+    --space-9: 6rem;
+
+    /* Vertical rhythm between the full-width bands. */
+    --section-y: clamp(3rem, 8vw, 6rem);
+
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 20px;
+
+    /* Comfortable line length for running prose. */
+    --measure: 68ch;
+}
+
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     font-family: 'Arizonia', cursive;
     font-family: 'Poppins', sans-serif;
 }
@@ -10,7 +65,27 @@
    the page to a light scheme so it renders the same for everyone. */
 html{
     color-scheme: light;
-    background-color: #fff;
+    background-color: var(--paper);
+}
+
+body{
+    color: var(--ink);
+    font-size: var(--fs-base);
+    line-height: 1.7;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+}
+
+/* There was no keyboard focus state anywhere on the site. A gold ring
+   reads against the photography; the dark halo makes it read against
+   white as well, so one rule covers every context. */
+:focus-visible{
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(20,20,20,0.45);
 }
 
 hr{
@@ -26,17 +101,17 @@ hr{
 .header{
     min-height: 100vh;
     width: 100%;
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/teddy.jpg);
+    background-image: var(--overlay),url(imgs/teddy.jpg);
     background-position: center;
     background-size: cover;
     position: relative;
-    margin-bottom: 70px;
+    margin-bottom: var(--section-y);
 }
 
 nav{
     display: flex;
     justify-content: space-between;
-    padding: 20px 25px;
+    padding: var(--space-5) var(--space-6);
     align-items: center;
 }
 
@@ -56,28 +131,30 @@ nav img{
 .nav-links ul li{
     list-style: none;
     display: inline-block;
-    padding: 8px 12px;
+    padding: var(--space-2) var(--space-3);
     position: relative;
-    word-spacing: 30px;
 }
 
 .nav-links ul li a{
     color: #fff;
     text-decoration: none;
-    font-size: 15px;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.01em;
 }
 
 .nav-links ul li::after{
     content: '';
     width: 0%;
     height: 2px;
-    background: #d4af37;
+    background: var(--gold);
     display: block;
     margin: auto;
-    transition: 0.5s;
+    transition: width 0.3s ease;
 }
 
-.nav-links ul li:hover::after{
+.nav-links ul li:hover::after,
+.nav-links ul li:focus-within::after{
     width: 100%;
 }
 
@@ -92,31 +169,57 @@ nav img{
 }
 
 .text-box h1{
-    font-size: 40px;
+    font-size: var(--fs-hero);
+    line-height: 1.15;
 }
 
 .text-box p{
-    margin: 10px 0 40px;
-    font-size: 14px;
+    margin: var(--space-4) auto var(--space-6);
+    font-size: var(--fs-lg);
     color: #fff;
+    max-width: var(--measure);
+}
+
+/* BUTTONS
+
+   Six selectors used to repeat the same declarations with small
+   inconsistencies between them. They share a base here, and each keeps
+   only the colours that distinguish it. The transition also used to sit
+   inside :hover, so the effect animated on the way in but snapped back
+   on the way out. */
+
+.hero-btn,
+.service-btn,
+#service-btn-bottom,
+#service-content-btn,
+.reviews a{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    text-decoration: none;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    padding: var(--space-3) var(--space-6);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.25s ease, border-color 0.25s ease,
+                color 0.25s ease;
 }
 
 .hero-btn{
-    display: inline-block;
-    text-decoration: none;
     color: #fff;
-    border: 1px solid #fff;
-    padding: 12px 34px;
-    font-size: 13px;
-    background: transparent;
-    position: relative;
-    cursor: pointer;
+    border-color: #fff;
 }
 
 .hero-btn:hover{
-    border: 1px solid #d4af37;
-    background: #d4af37;
-    transition: 1s;
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--gold-deep);
 }
 
 nav .fa{
@@ -126,382 +229,369 @@ nav .fa{
 /* SERVICES */
 
 .services{
-    background: transparent;
     width: 95%;
-    margin: auto;
+    margin: 0 auto var(--section-y);
     text-align: center;
-    padding-top: 70px;
-    padding-bottom: 2em;
-    color: black;
-    border-radius: 10px;
+    padding: var(--section-y) var(--space-5);
+    border-radius: var(--radius-md);
     position: relative;
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/try9.jpg);
+    background-image: var(--overlay),url(imgs/try9.jpg);
     background-position: center;
     background-size: cover;
-    margin-bottom: 70px;
 }
 
 .service-btn{
-    display: inline-block;
-    text-decoration: none;
-    color: #d4af37;
-    background: transparent;
-    border: 1px solid white;
-    padding: 12px 34px;
-    font-size: 13px;
-    position: relative;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-#service-btn-bottom{
-    display: inline-block;
-    text-decoration: none;
-    color: white;
-    background-color: #d4af37;
-    border: 1px solid black;
-    padding: 12px 34px;
-    font-size: 13px;
-    position: relative;
-    cursor: pointer;
-    border-radius: 15px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-
-}
-
-#service-btn-bottom:hover{
-    border: 1px solid #d4af37;
-    background: #fff;
-    color: black;
-    transition: 0.5s;
+    color: var(--gold-bright);
+    border-color: #fff;
+    margin-top: var(--space-3);
 }
 
 .service-btn:hover{
-    border: 1px solid #d4af37;
     background: #fff;
-    color: black;
-    transition: 0.5s;
+    border-color: var(--gold);
+    color: var(--gold-ink);
+}
+
+/* Was white text on the gold fill, 2.1:1. Dark on gold is 10:1. */
+#service-btn-bottom{
+    color: var(--gold-deep);
+    background: var(--gold);
+    border-color: var(--gold);
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-5);
+}
+
+#service-btn-bottom:hover{
+    background: #fff;
+    border-color: #fff;
+    color: var(--gold-ink);
 }
 
 #service-content-btn{
-    display: inline-block;
-    text-decoration: none;
-    color: #d4af37;
-    background: transparent;
-    border: 1px solid white;
-    padding: 12px 34px;
-    font-size: 13px;
-    position: relative;
-    cursor: pointer;
-    margin-top: 10px;
-    background-color: navy;
-    margin-bottom: 20px;
+    color: var(--gold-bright);
+    background: var(--navy);
+    border-color: var(--navy);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-5);
+}
+
+#service-content-btn:hover{
+    background: #fff;
+    border-color: var(--gold);
+    color: var(--gold-ink);
 }
 
 h1{
-    font-size: 36px;
+    font-size: var(--fs-h1);
     font-weight: 600;
+    line-height: 1.2;
+}
+
+h1, h2, h3{
+    text-wrap: balance;
 }
 
 .services h1{
-    color: #d4af37;
+    color: var(--gold-bright);
 }
 
 .services p{
-    color: white;
+    color: #fff;
 }
 
 p{
-    color: black;
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 22px;
-    padding: 10px;
+    font-size: var(--fs-base);
+    font-weight: 400;
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+    text-wrap: pretty;
 }
 
 .row{
-    margin-top: 5%;
+    margin-top: var(--space-6);
     display: flex;
     justify-content: space-between;
+    gap: var(--space-6);
 }
 
 .services-col{
     flex-basis: 31%;
-    background: transparent;
-    color: white;
-    border-radius: 10px;
-    margin-bottom: 5%;
-    padding: 20px 12px;
-    box-sizing: border-box;
-    margin: 0 auto;
-    border: 2px solid white;
+    color: #fff;
+    border-radius: var(--radius-md);
+    padding: var(--space-5) var(--space-4);
+    border: 2px solid #fff;
+    transition: border-color 0.3s ease;
 }
 
 h3{
     text-align: center;
     font-weight: 600;
-    margin: 10px 0;
-    color: #d4af37;
+    font-size: var(--fs-h3);
+    line-height: 1.3;
+    margin: var(--space-3) 0;
+    color: var(--gold-ink);
 }
 
 .services-col:hover{
-    border: 2px solid #d4af37;
-    transition: 0.5s;
+    border-color: var(--gold);
+}
+
+.services-col h3{
+    color: var(--gold-bright);
 }
 
 /* team-values */
 
 .team-values{
     width: 100%;
-    margin: auto;
-    margin-bottom: -30px;
     text-align: center;
-    padding-top: 70px;
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/try19.jpg);
+    padding: var(--section-y) var(--space-7);
+    margin-bottom: var(--section-y);
+    background-image: var(--overlay),url(imgs/try19.jpg);
     background-position: center;
     background-size: cover;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
 }
 
 .team-values h1{
-    color: #d4af37;
-    font-size: 36px;
-    border-radius: 10px;
+    color: var(--gold-bright);
 }
 
 .team-values p{
-    color: white;
+    color: #fff;
 }
 
 .team-values p i{
-    font-size: 12px;
+    font-size: var(--fs-sm);
 }
 
 .team-values-col{
     flex-basis: 45%;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     text-align: center;
-    width: 100%;
-    margin-right: 60px;
-    margin-left: 60px;
 }
 
 .team-values-col img{
     width: 100%;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
 }
 
 .team-values-col p{
-    padding: 0;
-    color: white;
+    margin-bottom: var(--space-2);
+    color: #fff;
 }
 
 .team-values-col h3{
-    margin-top: 25px;
-    margin-bottom: 15px;
-    color: #d4af37;
+    margin: var(--space-5) 0 var(--space-3);
+    color: var(--gold-bright);
 }
 
 /* locations */
 
 .locations{
     width: 100%;
-    margin: auto;
     text-align: center;
-    padding-top: 80px;
-    margin-top: 100px;
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/tank1.jpg);
+    padding: var(--section-y) var(--space-7);
+    background-image: var(--overlay),url(imgs/tank1.jpg);
     background-position: center;
     background-size: cover;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
 }
 
 .locations h1{
-    color: #d4af37;
-    padding: 5px;
-    border-radius: 10px;
+    color: var(--gold-bright);
 }
 
 .locations p{
-    color: white;
+    color: #fff;
 }
 
 .locations-col{
     flex-basis: 45%;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     text-align: center;
-    padding-top: 30px;
-    width: 100%;
-    margin-right: 60px;
-    margin-left: 60px;
 }
 
 .locations-col img{
     width: 100%;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
 }
 
 .locations-col p{
-    padding: 0;
-    color: white;
+    margin-bottom: var(--space-2);
+    color: #fff;
 }
 
 .locations-col h3{
-    margin-top: 25px;
-    margin-bottom: 15px;
-    color: #d4af37;
+    margin: var(--space-5) 0 var(--space-3);
+    color: var(--gold-bright);
 }
 
 /* reviews */
 
 .reviews{
     width: 80%;
-    margin: auto;
-    padding-top: 100px;
+    margin: 0 auto;
+    padding: var(--section-y) 0;
     text-align: center;
 }
 
 .reviews a{
-    display: inline-block;
-    text-decoration: none;
-    color: black;
-    border: 1px solid black;
-    padding: 12px 34px;
-    font-size: 13px;
-    background: transparent;
-    background-color: #d4af37;
-    position: relative;
-    cursor: pointer;
-    margin-top: 10px;
+    color: var(--gold-deep);
+    background: var(--gold);
+    border-color: var(--gold);
+    margin-top: var(--space-4);
+}
+
+.reviews a:hover{
+    background: var(--gold-ink);
+    border-color: var(--gold-ink);
+    color: #fff;
 }
 
 .reviews h1{
-    color: #d4af37;
+    color: var(--gold-ink);
 }
 
 .reviews-col{
     flex-basis: 44%;
-    border-radius: 10px;
-    margin-bottom: 5%;
+    border-radius: var(--radius-md);
     text-align: left;
-    background: #d4af37;
-    padding: 25px;
-    cursor: pointer;
+    background: var(--gold);
+    padding: var(--space-5);
     display: flex;
+    gap: var(--space-5);
 }
 
 .reviews-col img{
     height: 40px;
-    margin-left: 5px;
-    margin-right: 30px;
+    width: 40px;
+    object-fit: cover;
+    flex-shrink: 0;
     border-radius: 50%;
 }
 
 .review-name{
-    color: black;
+    color: var(--ink);
 }
 
 .reviews-col p{
-    padding: 0;
+    margin-bottom: var(--space-3);
 }
 
 .reviews-col h3{
-    margin-top: 15px;
+    margin: var(--space-3) 0 var(--space-2);
     text-align: left;
+    color: var(--ink);
 }
 
 /* contact us */
 
 .contact{
-    margin: 100px auto;
+    margin: var(--section-y) auto;
     width: 90%;
     background-image: linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url(imgs/gracehorseray.jpg);
     background-position: center;
     background-size: cover;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     text-align: center;
-    padding: 100px 0;
+    padding: var(--section-y) var(--space-5);
 }
 
 .contact h1{
-    color: #d4af37;
-    margin-bottom: 40px;
-    padding: 0;
+    color: var(--gold-bright);
+    margin-bottom: var(--space-6);
 }
 
 /* footer */
 
-.footer-container{
-    width: 50%;
-    display: flex;
-    justify-content: space-between;
-    margin: 0 auto;
-    padding: 15px 0;
-}
-
-.footer-container-link{ 
-    list-style: none;
-    text-decoration: none;
-    color: #d4af37;
-    font-size: 120%;
-    margin-top: 5px;
-}
-
 .footer{
     width: 100%;
     text-align: center;
-    padding: 30px 0;
+    padding: var(--space-7) var(--space-5);
 }
 
 .footer h4{
-    color: #d4af37;
-    margin-bottom: 25px;
-    margin-top: 20px;
+    color: var(--gold-ink);
+    font-size: var(--fs-lg);
     font-weight: 600;
+    margin: var(--space-5) 0;
+}
+
+.footer p{
+    max-width: var(--measure);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #footer-img{
     width: 102px;
 }
 
+.footer-container{
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin: 0 auto;
+    padding: var(--space-4) 0;
+}
+
+.footer-container-link{
+    text-decoration: none;
+    color: var(--gold-ink);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}
+
+.footer-container-link:hover{
+    text-decoration: underline;
+}
+
 .icons .fa{
-    color: #d4af37;
+    color: var(--gold-ink);
     cursor: pointer;
-    padding: 10px 0;
+    padding: var(--space-3) 0;
     width: 80px;
-    border: 1px solid #d4af37;
-    border-radius: 10px;
-    font-size: larger;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    border: 1px solid var(--gold-ink);
+    border-radius: var(--radius-sm);
+    font-size: 1.25rem;
+    margin: var(--space-3) var(--space-2);
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.icons .fa:hover{
+    background: var(--gold-ink);
+    color: #fff;
 }
 
 /* about us page */
 
 #about-us-header{
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/try24.jpg);
+    background-image: var(--overlay),url(imgs/try24.jpg);
 }
 
 .about-us{
     width: 90%;
-    margin: auto;
-    padding-bottom: 50px;
+    margin: 0 auto;
+    padding-bottom: var(--section-y);
     text-align: center;
 }
 
 .about-us-values{
     display: flex;
     flex-direction: column;
-    font-size: 150%;
-    word-spacing: 40px;
-    color: #d4af37;
+    font-size: var(--fs-h2);
+    line-height: 1.5;
+    word-spacing: var(--space-6);
+    color: var(--gold-ink);
 }
 
 .about-us-values-mission{
-    font-size: 115%;
-    padding-top: 25px;
-    width: 30%;
+    font-size: var(--fs-lg);
+    padding-top: var(--space-5);
+    max-width: var(--measure);
     margin: 0 auto;
 }
 
@@ -511,38 +601,43 @@ h3{
 
 .about-col img{
     width: 100%;
-    padding-top: 75px;
+    margin-top: var(--space-8);
+    border-radius: var(--radius-md);
 }
 
 .about-col h1{
-    padding-top: 0%;
-    color: #d4af37;
+    color: var(--gold-ink);
 }
 
 .about-col p{
-    padding: 15px 0 25px;
+    margin: var(--space-4) auto var(--space-5);
+    max-width: var(--measure);
 }
 
 .other-btn{
-    border: 1px solid #d4af37;
+    border-color: var(--gold-ink);
     background: transparent;
-    color: #d4af37;
+    color: var(--gold-ink);
 }
 
+/* This used to set colour: white on a transparent background, so the
+   label vanished against the white page on hover. */
 .other-btn:hover{
-    color: white;
+    background: var(--gold-ink);
+    border-color: var(--gold-ink);
+    color: #fff;
 }
 
 /* services content */
 
 #services-header{
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/servicehead.jpg);
+    background-image: var(--overlay),url(imgs/servicehead.jpg);
 }
 
 .services-content{
     width: 90%;
-    margin: auto;
-    padding: 0;
+    margin: 0 auto;
+    padding-bottom: var(--section-y);
 }
 
 .services-left{
@@ -551,23 +646,18 @@ h3{
 
 .services-left img{
     width: 100%;
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
 }
 
 .services-left h2{
-    color: #d4af37;   
+    color: var(--gold-ink);
     font-weight: 600;
-    margin: 30px 0;
+    font-size: var(--fs-h2);
+    margin: var(--space-6) 0;
 }
 
 .services-left p{
-    padding: 10px;
-    width: 100%;
-}
-
-.services-left h2{
-    font-size: 38px;
-    margin: 0 auto;
+    max-width: var(--measure);
 }
 
 .services-right{
@@ -575,93 +665,122 @@ h3{
 }
 
 .services-content-btn{
-    padding-top: 50px;
+    padding-top: var(--space-7);
 }
 
 .services-right h3{
-    background: navy;
-    color: #d4af37;
-    padding: 7px 0;
-    font-size: 16px;
-    margin-bottom: 20px;
+    background: var(--navy);
+    color: var(--gold-bright);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--fs-base);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-5);
 }
 
 .services-right div{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px;
-    box-sizing: border-box;
+    gap: var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid #e2e2e2;
 }
 
 
 /* contact us page */
 
 #contact-main-header{
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/try20.jpg);
+    background-image: var(--overlay),url(imgs/try20.jpg);
 }
 
 #values-header{
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/contactbanner.jpg);
+    background-image: var(--overlay),url(imgs/contactbanner.jpg);
 }
 
 .map-location{
     width: 80%;
-    margin: auto;
-    padding-bottom: 40px;
-    /* border: 2px solid red; */
+    margin: 0 auto;
+    padding-bottom: var(--space-7);
+}
+
+.map-location h3{
+    color: var(--gold-ink);
+    margin-bottom: var(--space-4);
 }
 
 .map-location h3 i{
-    font-size: 14px;
-    color: black;
+    font-size: var(--fs-sm);
+    font-weight: 400;
+    color: var(--ink);
 }
 
 .map-location iframe{
     width: 100%;
+    display: block;
+    border-radius: var(--radius-md);
 }
 
 .contact-us{
     width: 80%;
-    margin: auto;
+    margin: 0 auto var(--section-y);
 }
 
 .contact-col{
     flex-basis: 48%;
-    margin-bottom: 30px;
+    margin-bottom: var(--space-5);
 }
 
 .contact-col div{
     display: flex;
     align-items: center;
-    margin-bottom: 40px;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
 }
 
 .contact-col div .fa{
-    font-size: 24px;
-    color: #d4af37;
-    margin: 10px;
-    margin-right: 30px;
+    font-size: 1.5rem;
+    color: var(--gold-ink);
+    width: 1.5rem;
+    flex-shrink: 0;
+    text-align: center;
 }
 
 .contact-col div p{
-    padding: 0;
+    margin: 0;
 }
 
 .contact-col div h5{
-    font-size: 20px;
-    margin-bottom: 5px;
-    color: #d4af37;
-    font-weight: 400;
+    font-size: var(--fs-lg);
+    margin-bottom: var(--space-1);
+    color: var(--gold-ink);
+    font-weight: 500;
 }
 
+/* outline: none used to strip the focus ring off the contact form
+   entirely, leaving no way to see where the keyboard was. */
 .contact-col input, .contact-col textarea{
     width: 100%;
-    padding: 15px;
-    margin-bottom: 17px;
-    outline: none;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    background: #fff;
+}
+
+.contact-col textarea{
+    resize: vertical;
+}
+
+.contact-col input:focus-visible, .contact-col textarea:focus-visible{
+    border-color: var(--gold-ink);
+}
+
+.contact-col ::placeholder{
+    color: #6b6b6b;
+    opacity: 1;
 }
 
 /* team */
@@ -669,49 +788,47 @@ h3{
 
 .family{
     width: 95%;
-    margin: auto;
-    padding-bottom: 50px;
+    margin: 0 auto;
+    padding-bottom: var(--section-y);
     text-align: center;
 }
 
 #family-header{
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/try21.jpg);
+    background-image: var(--overlay),url(imgs/try21.jpg);
 }
 
-#angela-col{
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/grasssnooz.jpg);
-    border-radius: 20px;
-}
-
-#gracie-col{
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/grasssnooz.jpg);
-    border-radius: 20px;
-}
-
+#angela-col,
+#gracie-col,
 #ellie-col{
-    background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/grasssnooz.jpg);
-    border-radius: 20px;
+    background-image: var(--overlay),url(imgs/grasssnooz.jpg);
+    background-position: center;
+    background-size: cover;
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
 }
 
 
 .family-col{
     flex-basis: 48%;
-    padding: 30px 2px;
+    padding: var(--space-6) var(--space-2);
 }
 
 .family-col img{
     width: 90%;
+    border-radius: var(--radius-md);
 }
 
 .family-col h1{
-    padding-top: 5%;
-    color: #d4af37;
+    color: var(--gold-bright);
+    margin-bottom: var(--space-2);
 }
 
 .family-col p{
-    color: white;
-    padding-left: 50px;
-    padding-right: 50px;
+    color: #fff;
+    max-width: var(--measure);
+    margin-left: auto;
+    margin-right: auto;
+    padding-inline: var(--space-6);
 }
 
 
@@ -725,54 +842,38 @@ h3{
         width: 100%;
     }
     .family-col p{
-        padding-left: 5px;
-        padding-right: 5px;
+        padding-inline: var(--space-4);
     }
     .contact-col div h5{
-        font-size: 16px;
-    }
-    .contact-col button{
-        background-color: navy;
-    }
-    .about-us h1{
-        font-size: 28px;
+        font-size: var(--fs-base);
     }
     .about-us img{
         display: none;
     }
     .about-us-values{
         width: 100%;
-        word-spacing: 40px;
-    }
-    .about-us-values-mission{
-        width: 90%;
-        font-size: 100%;
+        word-spacing: var(--space-6);
     }
     .footer-container{
         width: 80%;
-        display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        margin: 0 auto;
-        padding: 15px 0;
+        gap: var(--space-2);
     }
     html, body {overflow-x: hidden;}
-    .text-box h1{
-        font-size: 20px;
-    }
     .nav-links ul li{
         display: block;
+        padding: var(--space-3) var(--space-4);
     }
     .nav-links{
         position: fixed;
-        background: #d4af37;
+        background: var(--gold);
         height: 65vh;
         width: 200px;
         top: 0;
         right: 0;
         text-align: left;
         z-index: 2;
-        border-radius: 20px;
+        border-radius: var(--radius-lg);
         margin-top: 35px;
         transform: translateX(220px);
         visibility: hidden;
@@ -782,87 +883,75 @@ h3{
         transform: translateX(0);
         visibility: visible;
     }
+    /* White on the gold panel is 2.1:1. The panel needs dark text. */
+    .nav-links ul li a{
+        color: var(--gold-deep);
+    }
+    .nav-links ul li::after{
+        background: var(--gold-deep);
+    }
+    nav{
+        padding: var(--space-4);
+    }
     nav .fa{
         display: block;
         color: #fff;
-        margin: 10px;
+        margin: var(--space-2);
         font-size: 22px;
         cursor: pointer;
         text-align: right;
-        padding: 5px 10px;
+        padding: var(--space-1) var(--space-2);
+    }
+    .nav-links .fa{
+        color: var(--gold-deep);
     }
     .nav-links ul{
         text-align: end;
-        padding: 10px;
+        padding: var(--space-2);
     }
     .text-box{
-        margin-top: 30px;
+        margin-top: var(--space-6);
     }
     .header img{
-        margin-left: -15px;
+        margin-left: 0;
         width: 130px;
     }
     .services{
-        background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(imgs/try17.jpg);
-    }
-    .contact h1{
-        font-size: 24px;
+        background-image: var(--overlay),url(imgs/try17.jpg);
     }
     .row{
         flex-direction: column;
+        gap: var(--space-5);
     }
     .services-col{
-        width: 90%;
-        margin-top: 10px;
-        margin-bottom: 10px;
+        width: 100%;
     }
     .services{
-        padding-bottom: 5px;
         border-radius: 0;
         width: 100%;
     }
-    .services h1{
-        font-size: 20px;
-    }
     .reviews{
         width: 90%;
-        padding-top: 40px;
     }
     .reviews-col{
         flex-direction: column;
     }
     .reviews-col img{
-        padding-bottom: 15px;
         margin: 0 auto;
     }
     .locations{
-        padding-top: 40px;
-        margin-bottom: 20px;
-        border-radius: 0%;
-    }
-    .locations h1{
-        font-size: 20px;
-    }
-    .locations-col{
-        margin-right: 0px;
-        margin-left: 0px;
+        border-radius: 0;
+        padding-inline: var(--space-5);
     }
     .locations p{
         width: 95%;
-        margin: 0 auto;
+        margin: 0 auto var(--space-4);
     }
     .team-values{
-        padding-top: 40px;
         border-radius: 0;
-    }
-    .team-values h1{
-        font-size: 20px;
+        padding-inline: var(--space-5);
     }
     .team-values a img{
-        padding-top: 30px;
-    }
-    .team-values-col{
-        margin-right: 0px;
-        margin-left: 0px;
+        padding-top: var(--space-6);
     }
 }
